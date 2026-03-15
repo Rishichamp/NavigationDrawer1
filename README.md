@@ -55,13 +55,10 @@ Main components of the application:
 
 ## Screenshots
 
-You can add screenshots of the app interface here.
+<p align="center">
+  <img src="navigation_drawer.png" width="300">
+</p>
 
-Example:
-
-![App Screenshot](screenshots/app.png)
-
----
 
 ## Author
 
