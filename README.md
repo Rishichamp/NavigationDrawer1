@@ -6,6 +6,13 @@ The app provides a side navigation menu that allows users to switch between diff
 
 ---
 
+## Purpose
+
+This project was created as a learning exercise to understand how to implement a **Navigation Drawer in Android applications** using Java and Fragments.  
+It demonstrates how to integrate **DrawerLayout, NavigationView, Toolbar, and Fragment transactions** to build a simple navigation-based user interface.
+
+---
+
 ## Features
 
 - Navigation Drawer integrated with Toolbar
@@ -59,6 +66,7 @@ Main components of the application:
   <img src="navigation_drawer.png" width="300">
 </p>
 
+---
 
 ## Author
 
