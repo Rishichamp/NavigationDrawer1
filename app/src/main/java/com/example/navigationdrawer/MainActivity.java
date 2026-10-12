@@ -1,91 +1,81 @@
 package com.example.navigationdrawer;
 
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
+
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
-import android.os.Bundle;
-import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
-public class MainActivity extends AppCompatActivity
-{
-    DrawerLayout drawerLayout;
-    NavigationView navigationView;
-    Toolbar toolbar;
+public class MainActivity extends AppCompatActivity {
+
+    private DrawerLayout drawerLayout;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        drawerLayout=findViewById(R.id.drawerLayout);
-        navigationView=findViewById(R.id.navigation_view);
-        toolbar=findViewById(R.id.toolbar);
-
-        //Step 1
+        drawerLayout = findViewById(R.id.drawerLayout);
+        NavigationView navigationView = findViewById(R.id.navigation_view);
+        Toolbar toolbar = findViewById(R.id.toolbar);
 
         setSupportActionBar(toolbar);
-        ActionBarDrawerToggle toggle= new ActionBarDrawerToggle(
-                this,drawerLayout,toolbar,R.string.OpenDrawer,R.string.CloseDrawer);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawerLayout, toolbar, R.string.OpenDrawer, R.string.CloseDrawer);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        loadFragment(new AFragment());
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener()
-        {
+        // After a rotation the fragment manager restores the screen itself;
+        // adding it again stacked a second copy on top.
+        if (savedInstanceState == null) {
+            showHome();
+        }
+
+        navigationView.setNavigationItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.optHome) {
+                showHome();
+            } else if (id == R.id.optNotes) {
+                Toast.makeText(this, "Notes", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show();
+            }
+            drawerLayout.closeDrawer(GravityCompat.START);
+            return true;
+        });
+
+        // Back closes an open drawer first (replaces the deprecated onBackPressed override).
+        OnBackPressedCallback closeDrawer = new OnBackPressedCallback(false) {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item)
-            {
-               int id=item.getItemId();
-               if(id==R.id.optHome)
-               {
-                        loadFragment(new AFragment());
-               }
-               else if(id==R.id.optNotes)
-               {
-                   Toast.makeText(MainActivity.this, "Notes", Toast.LENGTH_SHORT).show();
-               }
-               else
-               {
-                   Toast.makeText(MainActivity.this, "Settings", Toast.LENGTH_SHORT).show();
-               }
-               drawerLayout.closeDrawer(GravityCompat.START);
+            public void handleOnBackPressed() {
+                drawerLayout.closeDrawer(GravityCompat.START);
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(this, closeDrawer);
+        drawerLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+            @Override
+            public void onDrawerOpened(@NonNull View drawerView) {
+                closeDrawer.setEnabled(true);
+            }
 
-
-
-                return true;
+            @Override
+            public void onDrawerClosed(@NonNull View drawerView) {
+                closeDrawer.setEnabled(false);
             }
         });
     }
 
-    @Override
-    public void onBackPressed()
-    {
-        if(drawerLayout.isDrawerOpen(GravityCompat.START))
-        {
-            drawerLayout.closeDrawer(GravityCompat.START);
-        }
-        else
-        {
-            super.onBackPressed();
-        }
-    }
-
-    private void loadFragment(Fragment fragment)
-    {
-        FragmentManager fm=getSupportFragmentManager();
-        FragmentTransaction ft= fm.beginTransaction();;
-        ft.add(R.id.container,fragment);
-        ft.commit();
+    private void showHome() {
+        // replace, not add: add stacked a new Home screen on every tap.
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, new AFragment())
+                .commit();
     }
 }
