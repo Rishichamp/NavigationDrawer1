@@ -1,5 +1,7 @@
 # Navigation Drawer Android App
 
+[![build](https://github.com/Rishichamp/NavigationDrawer1/actions/workflows/build.yml/badge.svg)](https://github.com/Rishichamp/NavigationDrawer1/actions/workflows/build.yml)
+
 This Android project demonstrates how to implement a **Navigation Drawer using Java, Fragments, and AndroidX components** in Android Studio.
 
 The app provides a side navigation menu that allows users to switch between different sections of the application.
@@ -67,6 +69,13 @@ Main components of the application:
 </p>
 
 ---
+
+## 2026 update
+
+- **Tooling:** upgraded from Gradle 7.3 / AGP 7.2 (which don't run on the JDK 21 in current Android Studio) to Gradle 8.11.1, AGP 8.7.3, compileSdk 35 / targetSdk 34, Java 17 and current AndroidX libraries.
+- Choosing **Home** added a new copy of the screen on top of the old one every time (fragments were `add`ed, not `replace`d); rotating the phone stacked another. Now there is always exactly one.
+- Replaced the deprecated `onBackPressed()` with an `OnBackPressedCallback`; Back still closes an open drawer before leaving.
+- **Tests:** 4 on-device UI tests (drawer, repeated Home, rotation, Back), all passing on an Android 11 emulator, plus a 2,000-event monkey stress test with no crashes. GitHub Actions builds, unit-tests and lints the app on every push.
 
 ## Author
 
