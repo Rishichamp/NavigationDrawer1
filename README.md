@@ -79,4 +79,4 @@ Main components of the application:
 
 ## Author
 
-Rishi Singh
+**Rishi Singh** — [GitHub](https://github.com/Rishichamp)
